@@ -1,0 +1,17 @@
+$TTL {{ zone.ttl }}
+@	{{ zone.class }}	SOA	{{ zone.masterdns.name }}.{{ zonename }}. {{ zone.hostmaster }}.{{ zonename }}. (
+        {{ zone.serial }}	;Serial
+        {{ zone.refresh }}	;Refresh
+        {{ zone.retry }}	;Retry
+        {{ zone.expire }}	;Expire
+        {{ zone.ttl }}	;Minimum TTL
+)
+
+; nameservers
+@	IN	NS	{{ zone.masterdns.name }}.{{ zonename }}.
+
+@	IN	PTR	{{ zonename }}.
+
+{% for record, recordinfo in records.items() %}
+{{ recordinfo.reverse }}	IN	PTR	{{ record }}.{{ zonename }}.
+{% endfor %}

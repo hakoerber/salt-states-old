@@ -1,0 +1,15 @@
+{% set subsonic = salt['grains.filter_by']({
+    'RedHat': {
+        'dependencies': {
+            'java': 'java-1.7.0-openjdk',
+        },
+        'package': {
+            'name': 'subsonic',
+            'url': 'http://downloads.sourceforge.net/project/subsonic/subsonic/5.2.1/subsonic-5.2.1.rpm'
+        },
+        'service': 'subsonic',
+        'ports': {
+            'tcp': [4040],
+        },
+    },
+}, merge=salt['pillar.get']('subsonic:lookup'), default='default') %}

@@ -1,0 +1,42 @@
+{% set packages = salt['grains.filter_by']({
+    'RedHat': {
+      'git': 'git',
+      'zsh': 'zsh',
+      'tmux': 'tmux',
+      'vim': 'vim-enhanced',
+    },
+    'Arch': {
+      'vim': 'vim',
+      'ncmpcpp': 'ncmpcpp',
+      'i3': 'i3-wm',
+      'i3lock': 'i3lock',
+      'i3status': 'i3status',
+      'j4-dmenu-desktop': 'j4-dmenu-desktop',
+      'git': 'git',
+      'conky': 'conky',
+      'mpd': 'mpd',
+      'tmux': 'tmux    ',
+      'zsh': 'zsh',
+    },
+    'Debian': {
+      'conky': 'conky',
+      'git': 'git',
+      'i3': 'i3',
+      'i3lock': 'i3lock',
+      'i3status': 'i3status',
+      'j4-dmenu-desktop': 'i3',
+      'mpd': 'mpd',
+      'ncmpcpp': 'ncmpcpp',
+      'vim': 'vim',
+      'tmux': 'tmux',
+      'zsh': 'zsh',
+    },
+    'FreeBSD': {
+      'git': 'git',
+      'sudo': 'sudo',
+      'tmux': 'tmux',
+      'vim': 'vim',
+      'zsh': 'zsh',
+  },
+  'default': {}
+}, merge=salt['pillar.get']('packages:lookup'), default='default') %}

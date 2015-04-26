@@ -1,0 +1,16 @@
+# allow synchonizing from network
+restrict {{ network.ip }} mask {{ network.netmask }} limited noquery nopeer nomodify notrap
+
+{% if subrole == 'secondary' %}
+server {{ network.ntp.servers[0] }} iburst prefer
+{% endif %}
+{% if network.ntp.external_servers is not defined or network.ntp.external_servers == 'default' %}
+{% for server in ntp.default_servers %}
+server {{ server }} iburst
+{% endfor %}
+{% else %}
+{% for server in network.ntp.external_servers %}
+server {{ server }} iburst
+{% endfor %}
+{% endif %}
+

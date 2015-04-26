@@ -1,0 +1,21 @@
+{% set zabbix = salt['grains.filter_by']({
+    'RedHat': {
+        'agent': {
+            'package': 'zabbix22-agent',
+            'service': 'zabbix-agent',
+            'conf': {
+                'path': '/etc/zabbix_agentd.conf',
+                'template': 'salt://zabbix/files/zabbix_agentd.conf.jinja',
+            },
+            'port': 10050,
+        },
+    },
+    'Debian': {
+        'agent': {
+            'package': 'zabbix-agent',
+            'service': 'zabbix-agent',
+        },
+    },
+    'default': {
+    }
+}, merge=salt['pillar.get']('zabbix:lookup'), default='default') %}

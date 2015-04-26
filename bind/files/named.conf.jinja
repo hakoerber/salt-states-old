@@ -1,0 +1,87 @@
+{% set logfile = '/var/log/named/named.log' %}
+{% set rfc1912zones = '/etc/named.rfc1912.zones' %}
+
+acl "internal" {
+        localhost;
+        {{ network.ip }}/{{ network.prefix }};
+};
+
+options {
+        directory "{{ bind.main_directory }}";
+
+        listen-on port 53 {
+                127.0.0.1;
+                {% if role == 'master' %}
+                {{ dnsinfo.masterdns.ip }};
+                {% else %}
+                {{ dnsinfo.slavedns.ip }};
+                {% endif %}
+        };
+
+        listen-on-v6 port 53 {
+                none;
+        };
+
+        allow-query {
+                localhost;
+                {{ network.ip }}/{{ network.prefix }};
+        };
+
+        {% if not dnsinfo.dnssec %}
+        dnssec-enable no;
+        dnssec-validation no;
+        {% else %}
+        dnssec-enable yes;
+        dnssec-validation yes;
+        {% endif %}
+        dnssec-lookaside auto;
+};
+
+logging {
+        channel default_file {
+                file "/var/log/named/named.log" size 10m;
+                severity info;
+                print-time yes;
+                print-severity yes;
+                print-category yes;
+        };
+
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+
+        category default { 
+                default_file; 
+                default_debug; 
+        };
+};
+
+
+view "internal" {
+        match-clients {
+                internal;
+        };
+
+        recursion yes;
+
+        forward only;
+        forwarders {
+                {% for forwarder in dnsinfo.forwarders %}
+                {{ forwarder }};
+                {% endfor %}
+        };
+
+        {% if role == 'master' %}
+        {% include 'bind/files/master_snippet.jinja' with context %}
+        {% else %}
+        {% include 'bind/files/slave_snippet.jinja' with context %}
+        {% endif %}
+
+        zone "." IN {
+                type hint;
+                file "/var/named/named.ca";
+        };
+
+        include "{{ rfc1912zones }}";
+};

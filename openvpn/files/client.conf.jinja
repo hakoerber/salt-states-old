@@ -1,0 +1,40 @@
+port {{ vpn.port|default(openvpn.default_port) }}
+proto {{ vpn.protocol }}
+dev {{ vpn.devname }}
+dev-type {{ vpn.dev }}
+
+# files
+ca keys-{{ vpn.name }}/ca.crt
+cert keys-{{ vpn.name }}/client.crt
+key keys-{{ vpn.name }}/client.key
+tls-auth keys-{{ vpn.name }}/ta.key 1
+
+# mode and addressing
+client
+topology subnet
+nobind
+
+# connections
+<connection>
+remote {{ vpn.server.host }}
+</connection>
+
+# connection specificy
+resolv-retry infinite
+{% if vpn.compress %}
+comp-lzo
+{% endif %}
+cipher {{ vpn.cipher }}
+ns-cert-type server
+
+# logging
+log /var/log/openvpn-{{ vpn.name }}.log
+verb 4
+mute 20
+mute-replay-warnings
+
+# misc
+user {{ nobody }}
+group {{ nogroup }}
+persist-key
+persist-tun

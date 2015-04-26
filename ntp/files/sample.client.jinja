@@ -1,0 +1,9 @@
+{% if network.ntp.servers is not defined or network.ntp.servers == 'default' %}
+{% for server in ntp.default_servers %}
+server {{ server }} iburst
+{% endfor %}
+{% else %}
+{% for server in network.ntp.servers %}
+server {{ server }} iburst
+{% endfor %}
+{% endif %}

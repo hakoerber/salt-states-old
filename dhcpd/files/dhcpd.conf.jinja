@@ -1,0 +1,62 @@
+authorative;
+default-lease-time 3600;
+max-lease-time     86400;
+
+{% if failover_mode is defined %}
+failover peer "failover" {
+    {% if failover_mode == "primary" %}
+    {% set me = network.dhcp.failover.primary %}
+    {% set peer = network.dhcp.failover.secondary %}
+    {% else %}
+    {% set me = network.dhcp.failover.secondary %}
+    {% set peer = network.dhcp.failover.primary %}
+    {% endif %}
+    {% set myip = network.hosts.get(me.name).ip[0] %}
+    {% set peerip = network.hosts.get(peer.name).ip[0] %}
+
+    {{ failover_mode }};
+
+    address {{ myip }};
+    port {{ me.port }};
+    peer address {{ peerip }};
+    peer port {{ peer.port }};
+
+    max-response-delay 60;
+    max-unacked-updates 10;
+    mclt 3600;
+    
+    {% if failover_mode == "primary" %}
+    split 128;
+    {% endif %}
+
+    load balance max seconds 3;
+}
+{% endif %}
+
+subnet {{ network.ip }} netmask {{ network.netmask }} {
+    option routers             {{ network.gateway }};
+    option subnet-mask         {{ network.netmask }};
+
+    option domain-name         "{{ network.domain }}";
+
+    option domain-name-servers {% for nameserver in network.nameservers %}{{ network.hosts[nameserver].ip[0] }}{% if not loop.last %}, {% endif %}{% endfor %};
+    option ntp-servers         {{ network.ntp.servers | join(', ') }};
+
+    pool {
+        {% if failover_mode is defined %}
+        failover peer "failover";
+        deny dynamic bootp clients;
+        {% endif %}
+        range {{ network.dhcp.range.start }} {{ network.dhcp.range.end }};
+    }
+}
+
+{% for hostname, hostinfo in network.hosts.items() %}
+{% if hostinfo.mac is defined %}
+host {{ hostname }} {
+    hardware ethernet {{ hostinfo.mac }};
+    fixed-address {{ hostinfo.ip[0] }};
+}
+
+{% endif %}
+{% endfor %}

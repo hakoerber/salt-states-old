@@ -1,0 +1,54 @@
+{% set ntp = salt['grains.filter_by']({
+    'default': {
+    },
+    'Arch': {
+        'package': 'ntp',
+        'service': 'ntpd',
+        'conf_file' : '/etc/ntp.conf',
+        'default_servers' : [
+          '0.arch.pool.ntp.org',
+          '1.arch.pool.ntp.org',
+          '2.arch.pool.ntp.org',
+          '3.arch.pool.ntp.org'],
+    },
+    'Debian': {
+        'package': 'ntp',
+        'service': 'ntp',
+        'conf_file' : '/etc/ntp.conf',
+        'default_servers' : [
+          '0.debian.pool.ntp.org',
+          '1.debian.pool.ntp.org',
+          '2.debian.pool.ntp.org',
+          '3.debian.pool.ntp.org'],
+    },
+    'Ubuntu': {
+        'package': 'ntp',
+        'service': 'ntp',
+        'conf_file' : '/etc/ntp.conf',
+        'default_servers' : [
+          '0.ubuntu.pool.ntp.org',
+          '1.ubuntu.pool.ntp.org',
+          '2.ubuntu.pool.ntp.org',
+          '3.ubuntu.pool.ntp.org'],
+    },
+    'RedHat': {
+        'package': 'ntp',
+        'service': 'ntpd',
+        'conf_file' : '/etc/ntp.conf',
+        'default_servers' : [
+          '0.centos.pool.ntp.org',
+          '1.centos.pool.ntp.org',
+          '2.centos.pool.ntp.org',
+          '3.centos.pool.ntp.org'],
+    },
+    'FreeBSD': {
+        'package': 'ntp',
+        'service': 'ntpd',
+        'conf_file': '/etc/ntp.conf',
+        'default_servers': [
+          '0.freebsd.pool.ntp.org',
+          '1.freebsd.pool.ntp.org',
+          '2.freebsd.pool.ntp.org',
+          '3.freebsd.pool.ntp.org'],
+    }
+}, merge=salt['pillar.get']('ntp:lookup'), default='default') %}

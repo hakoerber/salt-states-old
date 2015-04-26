@@ -1,0 +1,33 @@
+{% set ssh = salt['grains.filter_by']({
+    'RedHat': {
+        'server': {
+            'package': 'openssh-server',
+            'service': 'sshd',
+            'conf_file': '/etc/ssh/sshd_config',
+            'ports': [22],
+            'default_keytypes': ['rsa'],
+            'sftp_binary': '/usr/libexec/openssh/sftp-server',
+        },
+    },
+    'Debian': {
+        'server': {
+            'package': 'openssh-server',
+            'service': 'ssh',
+            'conf_file': '/etc/ssh/sshd_config',
+            'ports': [22],
+            'default_keytypes': ['rsa'],
+            'sftp_binary': '/usr/lib/openssh/sftp-server',
+        },
+    },
+    'FreeBSD': {
+        'server': {
+            'package': None,
+            'service': 'sshd',
+            'conf_file': '/etc/ssh/sshd_config',
+            'ports': [22],
+            'default_keytypes': ['rsa'],
+            'sftp_binary': '/usr/libexec/sftp-server',
+        },
+    },
+    'default': {}
+}, merge=salt['pillar.get']('ssh:lookup'), default='default') %}

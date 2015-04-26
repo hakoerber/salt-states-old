@@ -1,0 +1,17 @@
+        allow-transfer { 
+                {{ dnsinfo.slavedns.ip }}; 
+        };
+        notify explicit;
+        also-notify {
+                {{ dnsinfo.slavedns.ip }};
+        };
+
+        zone "{{ network.domain }}" IN {
+                type master;
+                file "forward.{{ network.domain }}";
+        };
+
+        zone "{{ network.domain_reverse }}" IN {
+                type master;
+                file "reverse.{{ network.domain }}";
+        };

@@ -1,0 +1,36 @@
+$TTL {{ zone.ttl }}
+@	{{ zone.class }}	SOA	{{ zone.masterdns.name }}.{{ zonename }}. {{ zone.hostmaster }}.{{ zonename }}. (
+        {{ zone.serial }}	;Serial
+        {{ zone.refresh }}	;Refresh
+        {{ zone.retry }}	;Retry
+        {{ zone.expire }}	;Expire
+        {{ zone.ttl }}	;Minimum TTL
+)
+
+@	IN	A	{{ zone.masterdns.ip }}
+
+; nameservers
+{% for nameserver in nameservers %}
+@	IN	NS	{{ nameserver }}.{{ zonename }}.
+{% endfor %}
+
+; mailservers
+{% for mailserver, mailserverinfo in zone.mailservers.items() %}
+@	IN	MX	{{ mailserverinfo.priority }} {{ mailserver }}.{{ zonename }}.
+{% endfor %}
+
+; common records
+{% for record, recordinfo in records.items() %}
+{% for ip in recordinfo.ip %}
+{{ record }}	IN	A	{{ ip }}
+{% endfor %}
+{% for name in recordinfo.get('arecords', []) %}
+{% for ip in recordinfo.ip %}
+{{ name }}	IN	A	{{ ip }}
+{% endfor %}
+{% endfor %}
+{% for name in recordinfo.get('cnames', []) %}
+{{ name }}	IN	CNAME	{{ record }}
+{% endfor %}
+
+{% endfor %}

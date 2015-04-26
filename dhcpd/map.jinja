@@ -1,0 +1,7 @@
+{% set dhcpd = salt['grains.filter_by']({
+    'default': {
+        'package': 'dhcp',
+        'service': 'dhcpd',
+        'conf_file': '/etc/dhcp/dhcpd.conf',
+    },
+}, merge=salt['pillar.get']('dhcpd:lookup'), default='default') %}

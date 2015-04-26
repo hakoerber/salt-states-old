@@ -1,0 +1,10 @@
+{% set bind = salt['grains.filter_by']({
+    'default': {
+        'package': 'bind',
+        'service': 'named',
+        'conf_file' : '/etc/named.conf',
+        'user': 'bind',
+        'group': 'bind',
+        'main_directory': '/var/named'
+    },
+}, merge=salt['pillar.get']('bind:lookup'), default='default') %}

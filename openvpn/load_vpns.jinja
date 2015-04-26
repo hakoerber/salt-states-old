@@ -1,0 +1,15 @@
+{% set vpns = [] %}
+{% set vpns_authorative = [] %}
+{% for vpnname in salt['pillar.get']('vpns', []) %}
+{% set vpn = salt['pillar.get'](vpnname, None) %}
+{% if vpn == None %}
+{% continue %}
+{% endif %}
+{% do vpn.update({'devname': 'vpn-' + vpn.name}) %}
+{% do vpn.update({'config': vpn.get('clients', {}).get(grains['id'])}) %}
+{% if vpn.server.id == grains['id'] %}
+{% do vpns_authorative.append(vpn) %}
+{% continue %}
+{% endif %}
+{% do vpns.append(vpn) %}
+{% endfor %}

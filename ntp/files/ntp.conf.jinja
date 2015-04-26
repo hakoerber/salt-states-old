@@ -1,0 +1,23 @@
+{% set driftfile = '/var/lib/ntp/ntp.drift' %}
+{% set logfile = '/var/log/ntp.log' %}
+restrict -4 default limited nomodify nopeer noquery notrap
+restrict -6 default limited nomodify nopeer noquery notrap
+
+restrict -4 127.0.0.1
+restrict -6 ::1
+
+{% if role == 'client' %}
+{% include 'ntp/files/sample.client.jinja' with context %}
+{% else %}
+{% include 'ntp/files/sample.server.jinja' with context %}
+{% endif %}
+
+driftfile {{ driftfile }}
+
+# let ntp fall back to the local clock when there is no network connection
+server 127.127.1.1 
+fudge  127.127.1.1 stratum 12
+
+tinker panic 0
+
+logfile {{ logfile }}

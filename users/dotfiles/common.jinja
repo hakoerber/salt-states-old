@@ -1,0 +1,60 @@
+{% from 'users/dotfiles/map.jinja' import packages with context %}
+{% set pkgs = [] %}
+
+{% for user, userinfo in pillar.users.items() %}
+{% for program, proginfo in userinfo.get('dotfiles', {}).items() %}
+
+{% if not maximal and not proginfo.get('minimal', false)  %}
+{% continue %}
+{% endif %}
+
+{% for package in proginfo.get('required_packages', []) %}
+{% if package not in pkgs %}
+package-{{ package }}:
+  pkg.installed:
+    - name: {{ packages.get(package) }}
+{% endif %}
+{% do pkgs.append(package) %}
+{% endfor %}
+
+{% for file, fileinfo in proginfo.files.items() %}
+dotfile-{{ user }}-{{ file }}:
+  
+  {% if fileinfo.get('template', false) %}
+    {% set extension = '.jinja' %}
+  {% else %}
+    {% set extension = '' %}
+  {% endif %}
+  
+  file:
+    - name: {{ userinfo['home'] }}/.{{ file }}
+    {% if fileinfo.get('directory', false) %} 
+    - recurse
+    - include_empty: true
+    - keep_symlinks: true
+    - clean: true
+    {% else %}
+    - managed
+    - mode: 600
+    - follow_symlinks: false
+    {% endif %}
+    - user: {{ user }}
+    - group: {{ user }}
+    - source: salt://users/{{ user }}/dotfiles/{{ file }}{{ extension }}
+    - makedirs: true
+    {% if fileinfo.get('template', false) %}
+    - template: jinja
+    {% endif %}
+    - context:
+      userinfo: {{ userinfo }}
+      hostinfo: {{ pillar.hostinfo }}
+    {% if proginfo.required_packages is defined %}
+    - require:
+      {% for package in proginfo.required_packages %}
+      - pkg: package-{{ package }}
+      {% endfor %}
+    {% endif %}
+    
+{% endfor %}
+{% endfor %}
+{% endfor %}

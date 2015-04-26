@@ -1,0 +1,52 @@
+Interface "eth0"
+DatabaseDir "{{ vnstat.database_dir }}"
+Locale "-"
+MonthRotate 1
+DayFormat    "%F"
+MonthFormat  "%y-%m"
+TopFormat    "%x"
+RXCharacter       "%"
+TXCharacter       ":"
+RXHourCharacter   "r"
+TXHourCharacter   "t"
+UnitMode 0
+OutputStyle 3
+RateUnit 1
+MaxBandwidth 1000
+Sampletime 5
+QueryMode 0
+CheckDiskSpace 1
+UseFileLocking 1
+BootVariation 15
+TrafficlessDays 1
+
+DaemonUser "vnstat"
+DaemonGroup "vnstat"
+UpdateInterval 30
+PollInterval 5
+SaveInterval 5
+OfflineSaveInterval 30
+SaveOnStatusChange 1
+UseLogging 2
+CreateDirs 1
+UpdateFileOwner 1
+LogFile "{{ vnstat.logfile }}"
+PidFile "{{ vnstat.pidfile }}"
+
+HeaderFormat "%x %H:%M"
+HourlyRate 1
+SummaryRate 1
+SummaryLayout 1
+TransparentBg 0
+CBackground     "FFFFFF"
+CEdge           "AEAEAE"
+CHeader         "606060"
+CHeaderTitle    "FFFFFF"
+CHeaderDate     "FFFFFF"
+CText           "000000"
+CLine           "B0B0B0"
+CLineL          "-"
+CRx             "92CF00"
+CTx             "606060"
+CRxD            "-"
+CTxD            "-"

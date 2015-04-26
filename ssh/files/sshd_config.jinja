@@ -1,0 +1,15 @@
+Port {{ ports|join(' ') }}
+Protocol 2
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM yes
+PrintMotd no
+UsePrivilegeSeparation sandbox
+ClientAliveInterval 10
+TCPKeepAlive yes
+UseDns no
+Subsystem sftp {{ sftp_binary }}
+{% for keytype in keytypes %}
+HostKey /etc/ssh/ssh_host_{{ keytype }}_key
+{% endfor %}

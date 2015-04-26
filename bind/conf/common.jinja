@@ -1,0 +1,31 @@
+{% set conf_template = 'salt://bind/files/named.conf.jinja' %}
+
+include:
+  - bind
+
+named.conf:
+  file.managed:
+    - name: {{ bind.conf_file }}
+    - user: root
+    - group: root
+    - mode: 644
+    - source: {{ conf_template }}
+    - template: jinja
+    - require:
+      - pkg: bind
+      - file: named-logdir
+    - watch_in:
+      - service: bind
+    - defaults: 
+        bind: {{ bind }}
+        dnsinfo: {{ network.dns }}
+        role: {{ role }}
+        network: {{ network }}
+
+named-logdir:
+  file.directory:
+    - name: /var/log/named
+    - user: named
+    - group: named
+    - mode: 700
+

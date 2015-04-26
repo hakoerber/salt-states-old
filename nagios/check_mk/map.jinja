@@ -1,0 +1,33 @@
+{% set check_mk = salt['grains.filter_by']({
+    'RedHat': {
+        'agent': {
+            'package': 'check-mk-agent',
+            'service': 'xinetd',
+            'conf': {
+                'xinetd': {
+                    'path': '/etc/xinetd.d/check-mk-agent',
+                    'template': 'salt://nagios/check_mk/agent/files/check-mk-agent.jinja',
+                },
+            },
+            'port': 6556,
+        },
+    },
+    'Debian': {
+        'agent': {
+            'package': 'check-mk-agent',
+            'service': 'xinetd',
+            'conf': {
+                'xinetd': {
+                    'path': '/etc/xinetd.d/check_mk',
+                    'template': 'salt://nagios/check_mk/agent/files/check-mk-agent.jinja',
+                },
+            },
+            'port': 6556,
+        },
+        'server': {
+            'port': 80,
+        },
+    },
+    'default': {
+    }
+}, merge=salt['pillar.get']('check_mk:lookup'), default='default') %}

@@ -1,0 +1,19 @@
+{% set saltmap = salt['grains.filter_by']({
+    'default': {
+        'master': {
+            'service': 'salt-master',
+            'conf_file': '/etc/salt/master',
+            'ports': [ 4505, 4506 ],
+        },
+        'minion': {
+            'service': 'salt-minion',
+            'conf_file': '/etc/salt/minion',
+        },
+    },
+    'FreeBSD': {
+        'minion': {
+            'service': 'salt_minion',
+            'conf_file': '/etc/salt/minion',
+        },
+    },
+}, merge=salt['pillar.get']('salt:lookup'), default='default') %}

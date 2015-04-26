@@ -1,0 +1,15 @@
+{% set vnstat = salt['grains.filter_by']({
+    'default': {
+        'template' : 'salt://vnstat/files/vnstat.conf.jinja',
+        'database_dir' : '/var/lib/vnstat',
+        'logfile' : '/var/log/vnstat/vnstat.log',
+        'pidfile' : '/var/run/vnstat/vnstat.pid',
+        'package': 'vnstat',
+        'service': 'vnstat',
+        'conf_file' : '/etc/vnstat.conf',
+        'user': 'vnstat',
+        'group': 'vnstat',
+        'home': '/var/lib/vnstat',
+        'shell': '/bin/false',
+    },
+}, merge=salt['pillar.get']('vnstat:lookup'), default='default') %}

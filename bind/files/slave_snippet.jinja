@@ -1,0 +1,15 @@
+        zone "{{ network.domain }}" IN {
+                type slave;
+                masters {
+                        {{ dnsinfo.masterdns.ip }};
+                };
+                file "slaves/forward.{{ network.domain }}";
+        };
+
+        zone "{{ network.domain_reverse }}" IN {
+                type slave;
+                masters {
+                        {{ dnsinfo.masterdns.ip }};
+                };
+                file "slaves/reverse.{{ network.domain }}";
+        };

@@ -1,0 +1,13 @@
+{% set emby = salt['grains.filter_by']({
+    'RedHat': {
+        'repository': {
+            'name': 'MediaBrowserServer-repositories',
+            'url': 'https://github.com/MediaBrowser/MediaBrowser.Releases/raw/master/Repository/MediaBrowserServer-repositories.noarch.rpm',
+        },
+        'package': 'MediaBrowserServer',
+        'service': 'MediaBrowserServer',
+        'ports': {
+            'tcp': [8096, 8945, 8920],
+        },
+    },
+}, merge=salt['pillar.get']('emby:lookup'), default='default') %}

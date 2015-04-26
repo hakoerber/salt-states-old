@@ -1,0 +1,6 @@
+Defaults env_keep=PATH
+
+root ALL=(ALL) ALL
+
+%sudonopw ALL=(ALL) NOPASSWD: ALL
+%sudo ALL=(ALL) ALL

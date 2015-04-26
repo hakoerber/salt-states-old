@@ -1,0 +1,25 @@
+{% from "ntp/map.jinja" import ntp with context %}
+
+{% set network = salt['pillar.get']('network') %}
+{% set conf_template = 'salt://ntp/files/ntp.conf.jinja' %}
+
+include:
+  - ntp
+
+ntp.conf-{{ role }}:
+  file.managed:
+    - name: {{ ntp.conf_file }}
+    - user: root
+    - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
+    - mode: 644
+    - source: {{ conf_template }}
+    - template: jinja
+    - require:
+      - pkg: ntp
+    - watch_in:
+      - service: ntp
+    - defaults:
+      role: {{ role }}
+      subrole: {{ subrole }}
+      ntp: {{ ntp }}
+      network: {{ network }}
