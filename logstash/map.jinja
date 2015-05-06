@@ -13,6 +13,10 @@
             'cert': '/etc/pki/tls/certs/logstash-forwarder.crt',
             'source': 'salt://files/logstash/pki/logstash-forwarder.crt',
         },
+        'logs': {
+            'messages': '/var/log/messages',
+            'auth': '/var/log/secure',
+        },
     },
     'Debian': {
         'forwarder': {
@@ -28,6 +32,10 @@
             'cert': '/etc/ssl/certs/logstash-forwarder.crt',
             'source': 'salt://files/logstash/pki/logstash-forwarder.crt',
         },
+        'logs': {
+            'messages': '/var/log/messages',
+            'auth': '/var/log/auth.log',
+        },
     },
     'FreeBSD': {
         'forwarder': {
@@ -42,6 +50,10 @@
         'pki': {
             'cert': '/usr/local/etc/ssl/logstash-forwarder.crt',
             'source': 'salt://files/logstash/pki/logstash-forwarder.crt',
+        },
+        'logs': {
+            'messages': '/var/log/messages',
+            'auth': '/var/log/auth.log',
         },
     },
     'default': {

@@ -1,5 +1,7 @@
 {% from 'salt/map.jinja' import saltmap with context %}
 
+{% set master = pillar['salt_master'].get(grains['id'], 'salt') %}
+
 salt-minion:
   service.running:
     - name: {{ saltmap.minion.service }}
@@ -14,4 +16,7 @@ salt-minion-conf:
     - user: root
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 600
-    - source: salt://salt/files/minion
+    - source: salt://salt/files/minion.jinja
+    - template: jinja
+    - defaults:
+        master: {{ master }}

@@ -80,4 +80,3 @@ openvpn-server-dh-{{ vpn.name }}:
       - file: openvpn-keydir-{{ vpn.name }}
     - watch_in:
       - service: openvpn-server-{{ vpn.name }}
-{% endfor %}

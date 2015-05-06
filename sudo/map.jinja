@@ -11,5 +11,9 @@
         'package': 'sudo',
         'sudoers': '/usr/local/etc/sudoers',
     },
+    'Arch': {
+        'package': 'sudo',
+        'sudoers': '/etc/sudoers',
+    },
     'default': {}
 }, merge=salt['pillar.get']('sudo:lookup'), default='default') %}

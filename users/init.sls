@@ -31,7 +31,7 @@ user-{{ user }}:
     - password: {{ userinfo.password }}
     {% if userinfo.groups is defined %}
     - groups: {{ userinfo.groups }}
-    - remove_groups: true
+    - remove_groups: false
     {% else %}
     - remove_groups: false
     {% endif %}

@@ -17,4 +17,12 @@
             'service': 'openvpn',
         },
     },
+    'Arch': {
+        'default_port': '1194',
+        'client': {
+            'package': 'openvpn',
+            'service': 'openvpn@%s',
+        },
+    },
+
 }, merge=salt['pillar.get']('openvpn:lookup'), default='default') %}

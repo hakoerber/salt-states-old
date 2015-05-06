@@ -1,3 +1,4 @@
+{% from 'logstash/map.jinja' import logstash with context %}
 {
   "network": {
     "servers": [ 
@@ -14,8 +15,8 @@
   "files": [
     {
       "paths": [
-        "/var/log/messages",
-        "/var/log/secure"
+        "{{ logstash.logs.messages }}",
+        "{{ logstash.logs.auth }}"
        ],
       "fields": { "type": "syslog" }
     }
