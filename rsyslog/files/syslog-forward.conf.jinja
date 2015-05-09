@@ -1,0 +1,21 @@
+# format syslog as json
+template(name="plain_syslog_json" type="list" option.json="on") 
+{
+    constant(value="{")
+      constant(value="\"@timestamp\":\"")   property(name="timereported" dateFormat="rfc3339")
+      constant(value="\",\"type\":\"syslog")
+      constant(value="\",\"host\":\"")      property(name="hostname")
+      constant(value="\",\"severity\":\"")  property(name="syslogseverity-text")
+      constant(value="\",\"facility\":\"")  property(name="syslogfacility-text")
+      constant(value="\",\"syslogtag\":\"") property(name="syslogtag")
+      constant(value="\",\"message\":\"")   property(name="msg")
+    constant(value="\"}")
+}
+
+
+# send it all to logstash
+action(type="omfwd"
+       Target="{{ rsyslog.server.forwarder.host }}"
+       Port="{{ rsyslog.server.forwarder.port }}"
+       Protocol="{{ rsyslog.server.forwarder.protocol }}"
+       Template="plain_syslog_json")
