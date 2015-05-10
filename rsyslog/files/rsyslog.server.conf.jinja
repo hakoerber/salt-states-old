@@ -10,7 +10,3 @@ $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 $IMJournalStateFile imjournal.state
 
 $IncludeConfig {{ rsyslog.server.conf.include }}
-
-{% for match, file in rsyslog.client.logs.items() %}
-{{ match }} {{ file }}
-{% endfor %}

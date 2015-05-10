@@ -15,12 +15,15 @@ rsyslog.conf:
     - watch_in:
       - service: rsyslog-server
 
-syslog-forward.conf:
+{% for file in rsyslog.server.include %}
+
+
+{{ file }}:
   file.managed:
-    - name: {{ rsyslog.server.conf.include }}/syslog-forward.conf
+    - name: {{ rsyslog.server.conf.include }}/{{ file }}
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 644
-    - source: salt://rsyslog/files/syslog-forward.conf.jinja
+    - source: salt://rsyslog/files/{{ file }}.jinja
     - template: jinja
     - defaults:
         rsyslog: {{ rsyslog }}
@@ -28,5 +31,6 @@ syslog-forward.conf:
       - pkg: rsyslog-server
     - watch_in:
       - service: rsyslog-server
+{% endfor %}
 
 
