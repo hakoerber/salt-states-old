@@ -26,6 +26,14 @@
                 'include': '/etc/rsyslog.d/',
             },
             'include': ['local.conf', 'syslog-forward.conf'],
+            'modules': [
+                'imuxsock',
+                'imjournal',
+                'imklog',
+                'imtcp',
+                'imudp',
+            ],
+            'format': 'RSYSLOG_TraditionalFileFormat',
             'listen': {
                 'port': 5000,
                 'protocol': 'tcp'

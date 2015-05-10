@@ -1,12 +1,10 @@
-module(load="imuxsock")
-module(load="imjournal")
-module(load="imklog")
-module(load="imtcp")
-module(load="imudp")
+{% for module in rsyslog.server.modules %}
+module(load="{{ module }}")
+{% endfor %}
 
 global(workDirectory="{{ rsyslog.server.workdir }}")
 
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$ActionFileDefaultTemplate {{ rsyslog.server.format }}
 $IMJournalStateFile imjournal.state
 
 $IncludeConfig {{ rsyslog.server.conf.include }}
