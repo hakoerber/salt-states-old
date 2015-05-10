@@ -1,0 +1,7 @@
+{% set kibana = salt['grains.filter_by']({
+    'RedHat': {
+        'port': 80,
+    },
+    'default': {
+    }
+}, merge=salt['pillar.get']('kibana:lookup'), default='default') %}
