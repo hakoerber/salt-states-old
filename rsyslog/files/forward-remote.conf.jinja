@@ -1,0 +1,4 @@
+{% for server in network.logging.servers %}
+{% set sign = '@@' if server.protocol == 'tcp' else '@' %}
+*.* {{ sign }}{{ server.fqdn }}:{{ server.port }}
+{% endfor %}

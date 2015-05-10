@@ -15,8 +15,14 @@ template(name="plain_syslog_json" type="list" option.json="on")
 
 
 # send it all to logstash
-action(type="omfwd"
+
+ruleset(name="remote"){
+    action(type="omfwd"
        Target="{{ rsyslog.server.forwarder.host }}"
        Port="{{ rsyslog.server.forwarder.port }}"
        Protocol="{{ rsyslog.server.forwarder.protocol }}"
        Template="plain_syslog_json")
+}
+
+input(type="imtcp" port="514" ruleset="remote")
+input(type="imudp" port="514" ruleset="remote")

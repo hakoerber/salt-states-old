@@ -2,25 +2,25 @@
 
 rsyslog.conf:
   file.managed:
-    - name: {{ rsyslog.server.conf }} 
+    - name: {{ rsyslog.client.conf }} 
     - user: root
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 644
-    - source: salt://rsyslog/files/rsyslog.server.conf.jinja
+    - source: salt://rsyslog/files/rsyslog.client.conf.jinja
     - template: jinja
     - defaults:
         rsyslog: {{ rsyslog }}
     - require:
-      - pkg: rsyslog-server
+      - pkg: rsyslog-client
     - watch_in:
-      - service: rsyslog-server
+      - service: rsyslog-client
 
-{% for file in rsyslog.server.include %}
+{% for file in rsyslog.client.include %}
 
 
 {{ file }}:
   file.managed:
-    - name: {{ rsyslog.server.include_basedir }}/{{ file }}
+    - name: {{ rsyslog.client.include_basedir }}/{{ file }}
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 644
     - source: salt://rsyslog/files/{{ file }}.jinja
@@ -29,9 +29,9 @@ rsyslog.conf:
         rsyslog: {{ rsyslog }}
         network: {{ salt['pillar.get']('network') }}
     - require:
-      - pkg: rsyslog-server
+      - pkg: rsyslog-client
     - watch_in:
-      - service: rsyslog-server
+      - service: rsyslog-client
 {% endfor %}
 
 

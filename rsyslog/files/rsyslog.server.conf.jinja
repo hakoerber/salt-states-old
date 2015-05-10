@@ -7,4 +7,6 @@ global(workDirectory="{{ rsyslog.server.workdir }}")
 $ActionFileDefaultTemplate {{ rsyslog.server.format }}
 $IMJournalStateFile imjournal.state
 
-$IncludeConfig {{ rsyslog.server.conf.include }}
+{% for conf in rsyslog.server.include %}
+$IncludeConfig {{ rsyslog.server.include_basedir }}/{{ conf }}
+{% endfor %}

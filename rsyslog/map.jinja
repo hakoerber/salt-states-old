@@ -3,10 +3,19 @@
         'client': {
             'package': 'rsyslog',
             'service': 'rsyslog',
-            'conf': {
-                'file': '/etc/rsyslog.conf',
-                'include': '/etc/rsyslog.d/',
-            },
+            'workdir': '/var/lib/rsyslog',
+            'conf': '/etc/rsyslog.conf',
+            'include_basedir': '/etc/rsyslog.d',
+            'include': [
+                'local.conf', 
+                'forward-remote.conf'
+            ],
+            'modules': [
+                'imuxsock',
+                'imjournal',
+                'imklog',
+            ],
+            'format': 'RSYSLOG_TraditionalFileFormat',
             'logs': {
                 '*.info;mail.none;authpriv.none;cron.none': '/var/log/messages',
                 'authpriv.*': '/var/log/secure',
@@ -21,11 +30,12 @@
             'package': 'rsyslog',
             'service': 'rsyslog',
             'workdir': '/var/lib/rsyslog',
-            'conf': {
-                'file': '/etc/rsyslog.conf',
-                'include': '/etc/rsyslog.d/',
-            },
-            'include': ['local.conf', 'syslog-forward.conf'],
+            'conf': '/etc/rsyslog.conf',
+            'include_basedir': '/etc/rsyslog.d',
+            'include': [
+                'local.conf', 
+                'forward-logstash.conf'
+            ],
             'modules': [
                 'imuxsock',
                 'imjournal',

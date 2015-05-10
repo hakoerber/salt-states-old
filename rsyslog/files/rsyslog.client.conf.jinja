@@ -1,0 +1,12 @@
+{% for module in rsyslog.client.modules %}
+module(load="{{ module }}")
+{% endfor %}
+
+global(workDirectory="{{ rsyslog.client.workdir }}")
+
+$ActionFileDefaultTemplate {{ rsyslog.client.format }}
+$IMJournalStateFile imjournal.state
+
+{% for conf in rsyslog.client.include %}
+$IncludeConfig {{ rsyslog.client.include_basedir }}/{{ conf }}
+{% endfor %}

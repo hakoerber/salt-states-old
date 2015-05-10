@@ -1,4 +1,4 @@
 #if $fromhost-ip startswith '127.0.0.' then
 {% for match, file in rsyslog.client.logs.items() %}
-{{ match }} {{ file }}
+{{ match }} action(type="omfile" file="{{ file }}")
 {% endfor %}
