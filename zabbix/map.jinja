@@ -16,6 +16,12 @@
             'service': 'zabbix-agent',
         },
     },
+    'FreeBSD': {
+        'agent': {
+            'package': 'zabbix22-agent',
+            'service': 'zabbix_agentd',
+        },
+    },
     'default': {
     }
 }, merge=salt['pillar.get']('zabbix:lookup'), default='default') %}
