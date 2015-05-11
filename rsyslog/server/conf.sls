@@ -15,9 +15,14 @@ rsyslog.conf:
     - watch_in:
       - service: rsyslog-server
 
+rsyslog.d:
+  file.directory:
+    - name: {{ rsyslog.client.include_basedir }}
+    - user: root
+    - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
+    - mode: 755
+
 {% for file in rsyslog.server.include %}
-
-
 {{ file }}:
   file.managed:
     - name: {{ rsyslog.server.include_basedir }}/{{ file }}
@@ -33,5 +38,3 @@ rsyslog.conf:
     - watch_in:
       - service: rsyslog-server
 {% endfor %}
-
-
