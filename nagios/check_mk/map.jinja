@@ -28,6 +28,27 @@
             'port': 80,
         },
     },
+    'FreeBSD': {
+        'agent': {
+            'service': 'inetd',
+            'script': {
+                'path': '/usr/local/bin/check_mk_agent',
+                'source': 'salt://nagios/check_mk/agent/files/check_mk_agent.freebsd',
+            },
+            'conf': {
+                'inetd': {
+                    'path': '/etc/inetd.conf',
+                },
+                'services': {
+                    'path': '/etc/services',
+                },
+                'hosts_allow': {
+                    'path': '/etc/hosts.allow',
+                },
+            },
+            'port': 6556,
+        },
+    },
     'default': {
     }
 }, merge=salt['pillar.get']('check_mk:lookup'), default='default') %}

@@ -1,5 +1,6 @@
 {% from 'nagios/check_mk/map.jinja' import check_mk with context %}
 
+{% if grains['os_family'] != 'FreeBSD' %}
 check_mk-agent-iptables:
   iptables.append:
     - table: filter
@@ -11,3 +12,4 @@ check_mk-agent-iptables:
     - save: true
     - match: comment 
     - comment: check_mk-agent
+{% endif %}
