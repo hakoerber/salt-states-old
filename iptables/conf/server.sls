@@ -30,19 +30,16 @@ chain_tcpudp_{{ family }}:
   iptables.chain_present:
     - name: TCPUDP
     - family: {{ family }}
-    - save: true
 
 chain_tcpudppublic_{{ family }}:
   iptables.chain_present:
     - name: TCPUDPPUBLIC
     - family: {{ family }}
-    - save: true
     
 chain_tcpudplocal_{{ family }}:
   iptables.chain_present:
     - name: TCPUDPLOCAL
     - family: {{ family }}
-    - save: true
     
 accept_loopback_{{ family }}:
   iptables.append:
