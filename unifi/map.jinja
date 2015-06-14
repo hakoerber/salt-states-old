@@ -1,0 +1,15 @@
+{% set unifi = salt['grains.filter_by']({
+    'Debian': {
+        'controller': {
+            'ports': {
+                'web': {
+                    'tcp': ['8443'],
+                },
+                'ap-connect': {
+                    'tcp': ['8080'],
+                    'udp': ['3478', '10001'],
+                },
+            },
+        },
+    },
+}, merge=salt['pillar.get']('unifi:lookup'), default='default') %}
