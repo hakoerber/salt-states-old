@@ -1,0 +1,12 @@
+{% set pkg = salt['grains.filter_by']({
+    'default': {
+    },
+    'RedHat': {
+        'autoupdate': {
+            'package': 'yum-cron',
+            'service': 'yum-cron',
+            'conf_path': '/etc/yum/yum-cron.conf',
+            'conf_source': 'salt://pkg/files/yum-cron.conf.jinja',
+        },
+    }
+}, merge=salt['pillar.get']('pkg:lookup'), default='default') %}
