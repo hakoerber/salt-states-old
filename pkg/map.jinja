@@ -8,5 +8,21 @@
             'conf_path': '/etc/yum/yum-cron.conf',
             'conf_source': 'salt://pkg/files/yum-cron.conf.jinja',
         },
-    }
+    },
+    'Debian': {
+        'autoupdate': {
+            'package': 'unattended-upgrades',
+            'conf': {
+                'conf_20auto_upgrades': {
+                    'path': '/etc/apt/apt.conf.d/20auto-upgrades',
+                    'source': 'salt://pkg/files/20auto-upgrades',
+                },
+                'conf_50unattended_upgrades': {
+                    'path': '/etc/apt/apt.conf.d/50unattended-upgrades',
+                    'source': 'salt://pkg/files/50unattended-upgrades',
+                },
+            },
+        },
+    },
+
 }, merge=salt['pillar.get']('pkg:lookup'), default='default') %}

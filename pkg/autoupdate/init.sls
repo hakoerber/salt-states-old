@@ -10,4 +10,9 @@ yum-cron:
     - enable: True
     - require:
       - pkg: yum-cron
+
+{% elif grains['os_family'] == 'Debian' %}
+unattended-upgrades:
+  pkg.installed:
+    - name: {{ pkg.autoupdate.package }}
 {% endif %}
