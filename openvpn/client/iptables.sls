@@ -33,7 +33,7 @@ allow_forward_all_vpn_{{ vpn.name }}:
     - chain: {{ chain }}
     - jump: ACCEPT
     - save: true
-{% elif vpn.config.get.allow_forward is defined %}
+{% elif vpn.config.allow_forward is defined %}
 
 {% if not vpn.config.get('allow_access', False) %}
 deny_client_access_vpn_{{ vpn.name }}:
