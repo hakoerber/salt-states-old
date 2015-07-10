@@ -40,7 +40,7 @@ openvpn-tls-auth-key-{{ vpn.name }}:
     - watch_in:
       - service: openvpn-client-{{ vpn.name }}
 
-{% set common_name = grains['fqdn'] %}
+{% set common_name = grains['id'] %}
 
 openvpn-client-cert-{{ vpn.name }}:
   file.managed:
