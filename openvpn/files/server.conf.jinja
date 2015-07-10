@@ -18,8 +18,10 @@ topology subnet
 push "topology subnet"
 ifconfig {{ vpn.gateway }} {{ vpn.netmask }}
 push "route-gateway {{ vpn.gateway }}"
+{% if vpn.dhcp_pool is defined %}
 ifconfig-pool {{ vpn.dhcp_pool.start }} {{ vpn.dhcp_pool.end }} {{ vpn.netmask }}
 ifconfig-pool-persist /var/run/openvpn/ipp-{{ vpn.name }}.txt
+{% endif %}
 client-config-dir /etc/openvpn/ccd-{{ vpn.name }}
 client-to-client
 
