@@ -27,5 +27,27 @@ openvpn-server-{{ vpn.name }}-ccd:
     - name: /etc/openvpn/ccd-{{ vpn.name }}
     - user: root
     - group: root
-    - mode: 700
+    - mode: 755
+    - require:
+      - pkg: openvpn-server
+
+{% for name, conf in vpn.clients.items() %}
+{% if conf.ip != 'dhcp' or conf.advertise_subnet is defined %}
+openvpn-server-{{ vpn.name }}-ccd-{{ name }}:
+  file.managed:
+    - name: /etc/openvpn/ccd-{{ vpn.name }}/{{ name }}
+    - user: root
+    - group: root
+    - mode: 644
+    - source: salt://openvpn/files/server.ccd.jinja
+    - template: jinja
+    - context:
+      client_conf: {{ conf }}
+      vpn: {{ vpn }}
+    - require:
+      - file: openvpn-server-{{ vpn.name }}-ccd
+      - pkg: openvpn-server
+{% endif %}
+{% endfor %}
+
 {% endfor %}

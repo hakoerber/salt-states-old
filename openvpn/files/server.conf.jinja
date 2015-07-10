@@ -25,6 +25,15 @@ ifconfig-pool-persist /var/run/openvpn/ipp-{{ vpn.name }}.txt
 client-config-dir /etc/openvpn/ccd-{{ vpn.name }}
 client-to-client
 
+# advertised client subnets
+{% for name, conf in vpn.clients.items() %}
+{% if conf.advertise_subnet is defined %}
+# {{ name }}
+route {{ conf.advertise_subnet.ip }} {{ conf.advertise_subnet.mask }}
+push "route {{ conf.advertise_subnet.ip }} {{ conf.advertise_subnet.mask }}"
+{% endif %}
+{% endfor %}
+
 # connection specifics
 keepalive 10 120
 {% if vpn.compress %}
