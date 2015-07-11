@@ -25,3 +25,10 @@ salt-master-conf:
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 600
     - source: salt://salt/files/master
+
+salt-master.d:
+  file.directory:
+    - name: {{ saltmap.master.conf_dir }}
+    - uer: root
+    - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
+    - mode: 600
