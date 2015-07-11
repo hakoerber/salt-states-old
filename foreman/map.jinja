@@ -1,0 +1,16 @@
+{% set foreman = salt['grains.filter_by']({
+    'RedHat': {
+        'ports': {
+            'web': {
+                'tcp': ['443'],
+            },
+        },
+        'proxy': {
+            'ports': {
+                'https': {
+                    'tcp': ['8443'],
+                },
+            },
+        },
+    },
+}, merge=salt['pillar.get']('foreman:lookup'), default='default') %}
