@@ -1,8 +1,8 @@
 {% if grains['os_family'] == 'RedHat' %}
 
-{% set network = salt['pillar.get']('network') %}
-{% set hostname = grains['host'] %}
-{% set hostconfig = network.hosts.get(hostname, None) %}
+{% set network = salt['pillar.get']('network', {}) %}
+{% set hostname = salt['grains.get']('host', {}) %}
+{% set hostconfig = network.get('hosts', {}).get(hostname, None) %}
 
 {% if hostconfig != None %}
 {% set ifconfig = hostconfig.get('ifconfig', {}) %}
