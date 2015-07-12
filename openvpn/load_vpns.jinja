@@ -6,7 +6,7 @@
 {% continue %}
 {% endif %}
 {% do vpn.update({'devname': 'vpn-' + vpn.name}) %}
-{% do vpn.update({'config': vpn.get('clients', {}).get(grains['id'])}) %}
+{% do vpn.update({'config': vpn.get('clients', {}).get(grains['id'], {})}) %}
 {% if vpn.server.id == grains['id'] %}
 {% do vpns_authorative.append(vpn) %}
 {% continue %}
