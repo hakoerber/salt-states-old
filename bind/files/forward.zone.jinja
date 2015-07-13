@@ -23,6 +23,9 @@ $TTL {{ zone.ttl }}
 {% for record, recordinfo in records.items() %}
 {% for ip in recordinfo.ip %}
 {{ record }}	IN	A	{{ ip }}
+{% for subdomain in recordinfo.get('subdomains', []) %}
+{{ subdomain }}.{{ record }} IN	A   {{ ip }}
+{% endfor %}
 {% endfor %}
 {% for name in recordinfo.get('arecords', []) %}
 {% for ip in recordinfo.ip %}
