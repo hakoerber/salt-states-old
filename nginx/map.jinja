@@ -1,0 +1,19 @@
+{% set nginx = salt['grains.filter_by']({
+    'RedHat': {
+        'package': 'nginx',
+        'service': 'nginx',
+        'user': 'nobody',
+        'group': 'nobody',
+        'ports': {
+            'http': '80',
+            'https': '443',
+        },
+        'conf': {
+            'main_path': '/etc/nginx/nginx.conf',
+            'main_template': 'salt://nginx/files/nginx.conf.jinja',
+            'template_dir': 'salt://nginx/files/',
+            'include_dir': '/etc/nginx/conf.d',
+            'includes': ['mime.types'],
+        },
+    },
+}, merge=salt['pillar.get']('nginx:lookup'), default='default') %}

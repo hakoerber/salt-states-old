@@ -1,0 +1,6 @@
+{% from 'nginx/map.jinja' import nginx with context %}
+server {
+	listen {{ nginx.ports.http }} default_server;
+	return 301 https://$host$request_uri;
+}
+

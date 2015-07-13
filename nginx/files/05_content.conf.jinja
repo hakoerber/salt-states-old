@@ -1,0 +1,12 @@
+{% from 'nginx/map.jinja' import nginx with context %}
+server {
+    {% if content.protocol == 'http' %}
+    listen {{ nginx.ports.http }};
+    {% else %}
+    listen {{ nginx.ports.https }} ssl;
+    {% endif %}
+    root {{ content.path }};
+
+    location / {
+    }
+}

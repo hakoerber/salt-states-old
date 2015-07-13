@@ -1,0 +1,13 @@
+{% from 'nginx/map.jinja' import nginx with context %}
+events { }
+
+user {{ nginx.user }} {{ nginx.group }};
+worker_processes 1;
+
+http {
+    include conf.d/*.conf;
+
+    {% for include in nginx.conf.includes %}
+    include {{ include }};
+    {% endfor %}
+}
