@@ -1,0 +1,33 @@
+module(load="imfile")
+
+{% for file, path in files.items() %}
+template(name="{{ application }}-{{ file }}-json" type="list") {
+    constant(value="{")
+        constant(value="\"logtype\":\"")          constant(value="{{ application }}-{{ file }}")
+        constant(value="\",\"content\":{")
+            constant(value="\"message\":\"")       property(name="msg" format="json")
+        constant(value="\"}")
+        constant(value=",\"hostinfo\":{")
+            constant(value="\"hostname\":\"")       property(name="$myhostname")
+        constant(value="\"}")
+    constant(value="}")
+}
+
+ruleset(name="forward-{{ application }}-{{ file }}") {
+    action(
+        name="forward-tcp"
+        type="omfwd"
+        Template="{{ application }}-{{ file }}-json"
+        Target="log.lab"
+        Port="514"
+        Protocol="tcp"
+    )
+}
+
+input(type="imfile"
+    File="{{ path }}"
+    Tag="{{ application }}-{{ file }}"
+    StateFile="{{ path }}.state"
+    ruleset="forward-{{ application }}-{{ file }}"
+)
+{% endfor %}

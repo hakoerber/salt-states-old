@@ -7,12 +7,10 @@
             'conf': '/etc/rsyslog.conf',
             'include_basedir': '/etc/rsyslog.d',
             'include': [
-                'local.conf', 
-                'forward-remote.conf',
+                'syslog_forward.conf',
             ],
             'modules': [
                 'imuxsock',
-                'imjournal',
                 'imklog',
             ],
             'format': 'RSYSLOG_TraditionalFileFormat',
@@ -64,12 +62,10 @@
             'conf': '/etc/rsyslog.conf',
             'include_basedir': '/etc/rsyslog.d',
             'include': [
-                'local.conf', 
-                'forward-remote.conf',
+                'syslog_forward.conf',
             ],
             'modules': [
                 'imuxsock',
-                'imjournal',
                 'imklog',
             ],
             'format': 'RSYSLOG_TraditionalFileFormat',
@@ -95,12 +91,10 @@
             'conf': '/usr/local/etc/rsyslog.conf',
             'include_basedir': '/usr/local/etc/rsyslog.d',
             'include': [
-                'local.conf', 
-                'forward-remote.conf',
+                'syslog_forward.conf',
             ],
             'modules': [
                 'imuxsock',
-                'imjournal',
                 'imklog',
             ],
             'format': 'RSYSLOG_TraditionalFileFormat',

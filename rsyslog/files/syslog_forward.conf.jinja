@@ -1,0 +1,34 @@
+template(name="syslog-json" type="list") {
+    constant(value="{")
+      constant(value="\"logtype\":\"")          constant(value="syslog")
+      constant(value="\",\"content\":{")
+        constant(value="\"@timestamp\":\"")     property(name="timegenerated" dateFormat="rfc3339" format="json")
+        constant(value="\",\"host\":\"")        property(name="hostname" format="json")
+        constant(value="\",\"severity\":\"")    property(name="syslogseverity-text" format="json")
+        constant(value="\",\"facility\":\"")    property(name="syslogfacility-text" format="json")
+        constant(value="\",\"tag\":\"")         property(name="syslogtag" format="json")
+        constant(value="\",\"message\":\"")     property(name="msg" format="json")
+        constant(value="\",\"program\":\"")     property(name="programname" format="json")
+      constant(value="\"}")
+      constant(value=",\"hostinfo\":{")
+        constant(value="\"hostname\":\"")       property(name="$myhostname" format="json")
+      constant(value="\"}")
+    constant(value="}")
+}
+
+*.emerg action(type="omfile" file=":omusrmsg:*")
+mail.* action(type="omfile" file="-/var/log/maillog")
+*.info;mail.none;authpriv.none;cron.none action(type="omfile" file="/var/log/messages")
+local7.* action(type="omfile" file="/var/log/boot.log")
+authpriv.* action(type="omfile" file="/var/log/secure")
+uucp,news.crit action(type="omfile" file="/var/log/spooler")
+cron.* action(type="omfile" file="/var/log/cron")
+
+action(
+  name="send_syslog"
+  type="omfwd"
+  Template="syslog-json"
+  Target="log.lab"
+  Port="514"
+  Protocol="tcp"
+)

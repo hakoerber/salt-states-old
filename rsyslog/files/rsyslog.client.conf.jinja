@@ -1,12 +1,20 @@
+{% from 'rsyslog/map.jinja' import rsyslog with context %}
+
 {% for module in rsyslog.client.modules %}
 module(load="{{ module }}")
 {% endfor %}
 
-global(workDirectory="{{ rsyslog.client.workdir }}")
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 
-$ActionFileDefaultTemplate {{ rsyslog.client.format }}
-$IMJournalStateFile imjournal.state
+global(
+    workDirectory="{{ rsyslog.client.workdir }}"
+    preserveFQDN="on"
+)
 
 {% for conf in rsyslog.client.include %}
 $IncludeConfig {{ rsyslog.client.include_basedir }}/{{ conf }}
+{% endfor %}
+
+{% for application, _ in salt['pillar.get']("logging:applications").items() %}
+$IncludeConfig {{ rsyslog.client.include_basedir }}/{{ application }}.conf
 {% endfor %}

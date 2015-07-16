@@ -26,6 +26,7 @@ rsyslog.d:
 {{ file }}:
   file.managed:
     - name: {{ rsyslog.client.include_basedir }}/{{ file }}
+    - user: root
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 644
     - source: salt://rsyslog/files/{{ file }}.jinja
@@ -35,6 +36,7 @@ rsyslog.d:
         network: {{ salt['pillar.get']('network') }}
     - require:
       - pkg: rsyslog-client
+      - file: rsyslog.d
     - watch_in:
       - service: rsyslog-client
 {% endfor %}
