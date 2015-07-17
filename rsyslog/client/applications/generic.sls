@@ -1,11 +1,15 @@
+#!stateconf -G
 {% from 'rsyslog/map.jinja' import rsyslog with context %}
 
-{% set applications = salt['pillar.get']("logging:applications") %}
+.sls_params:
+  stateconf.set:
+    - test: "bla"
 
-{% for application, files in applications.items() %}
-rsyslog-{{ application }}.conf:
+# --- end of state config ---
+
+.rsyslog-app:
   file.managed:
-    - name: {{ rsyslog.client.include_basedir }}/{{ application }}.conf
+    - name: {{ rsyslog.client.include_basedir }}/{{ sls_params.application }}.conf
     - user: root
     - group: {{ salt['pillar.get']('systemdefaults:root-group', 'root') }}
     - mode: 644
@@ -13,11 +17,10 @@ rsyslog-{{ application }}.conf:
     - template: jinja
     - defaults:
         rsyslog: {{ rsyslog }}
-        application: {{ application }}
-        files: {{ files }}
+        application: {{ sls_params.application }}
+        files: {{ sls_params.files }}
     - require:
       - pkg: rsyslog-client
       - file: rsyslog.d
     - watch_in:
       - service: rsyslog-client
-{% endfor %}
