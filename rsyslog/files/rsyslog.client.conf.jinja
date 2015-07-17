@@ -11,10 +11,4 @@ global(
     preserveFQDN="on"
 )
 
-{% for conf in rsyslog.client.include %}
-$IncludeConfig {{ rsyslog.client.include_basedir }}/{{ conf }}
-{% endfor %}
-
-{% for application, _ in salt['pillar.get']("logging:applications").items() %}
-$IncludeConfig {{ rsyslog.client.include_basedir }}/{{ application }}.conf
-{% endfor %}
+$IncludeConfig /etc/rsyslog.d/*.conf
