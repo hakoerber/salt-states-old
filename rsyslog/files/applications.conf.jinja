@@ -27,7 +27,7 @@ ruleset(name="forward-{{ application }}-{{ file }}") {
 input(type="imfile"
     File="{{ path }}"
     Tag="{{ application }}-{{ file }}"
-    StateFile="{{ path }}.state"
+    StateFile="{{ path|replace('/', '-') }}.state"
     ruleset="forward-{{ application }}-{{ file }}"
 )
 {% endfor %}

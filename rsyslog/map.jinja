@@ -31,6 +31,9 @@
                 'salt-master': {
                     'log': '/var/log/salt/master',
                 },
+                'nagios': {
+                    'log': '/opt/omd/sites/lab/var/log/nagios.log',
+                },
             },
         },
         'server': {
@@ -89,6 +92,8 @@
                 '*.=debug;auth,authpriv.none;news.none;mail.none': '-/var/log/debug',
                 '*.=info;*.=notice;*.=warn;auth,authpriv.none;cron,daemon.none;mail,news.none': '-/var/log/messages',
                 '*.emerg': ':omusrmsg:*',
+            },
+            'applications': {
             },
         },
     },

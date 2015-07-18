@@ -2,8 +2,7 @@
 {% from 'rsyslog/map.jinja' import rsyslog with context %}
 
 .sls_params:
-  stateconf.set:
-    - test: "bla"
+  stateconf.set: []
 
 # --- end of state config ---
 
