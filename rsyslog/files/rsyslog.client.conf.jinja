@@ -11,4 +11,4 @@ global(
     preserveFQDN="on"
 )
 
-$IncludeConfig /etc/rsyslog.d/*.conf
+$IncludeConfig {{ rsyslog.client.include_basedir }}/*.conf
