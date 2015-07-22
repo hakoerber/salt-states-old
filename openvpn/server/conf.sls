@@ -31,6 +31,35 @@ openvpn-server-{{ vpn.name }}-ccd:
     - require:
       - pkg: openvpn-server
 
+{% set chain = 'VPN_' + vpn.name|upper %}
+
+openvpn-chain-vpn-{{ vpn.name }}:
+  iptables.chain_present:
+    - name: {{ chain }}
+
+openvpn-jump_forward_inward_vpn_{{ vpn.name }}:
+  iptables.append:
+    - table: filter
+    - chain: FORWARD
+    - in-interface: {{ vpn.devname }}
+    - jump: {{ chain }}
+    - save: true
+
+openvpn-jump_forward_outward_vpn_{{ vpn.name }}:
+  iptables.append:
+    - table: filter
+    - chain: FORWARD
+    - out-interface: {{ vpn.devname }}
+    - jump: {{ chain }}
+    - save: true
+
+openvpn-allow_forward_all_vpn_{{ vpn.name }}:
+  iptables.append:
+    - table: filter
+    - chain: {{ chain }}
+    - jump: ACCEPT
+    - save: true
+
 {% for name, conf in vpn.clients.items() %}
 {% if conf.ip != 'dhcp' or conf.advertise_subnet is defined %}
 openvpn-server-{{ vpn.name }}-ccd-{{ name }}:
@@ -47,6 +76,7 @@ openvpn-server-{{ vpn.name }}-ccd-{{ name }}:
     - require:
       - file: openvpn-server-{{ vpn.name }}-ccd
       - pkg: openvpn-server
+
 {% endif %}
 {% endfor %}
 
