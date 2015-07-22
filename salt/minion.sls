@@ -1,6 +1,6 @@
 {% from 'salt/map.jinja' import saltmap with context %}
 
-{% set master = pillar['salt_master'].get(grains['id'], 'salt') %}
+{% set master = salt['pillar.get']('override_salt_master', {}).get(grains['id'], 'salt') %}
 
 salt-minion:
   service.running:
