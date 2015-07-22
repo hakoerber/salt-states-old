@@ -8,7 +8,6 @@
 chain_vpn_{{ vpn.name }}:
   iptables.chain_present:
     - name: {{ chain }}
-    - save: true
 
 jump_forward_inward_vpn_{{ vpn.name }}:
   iptables.append:
