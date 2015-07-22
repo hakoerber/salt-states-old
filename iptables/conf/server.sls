@@ -188,6 +188,8 @@ tcpudp_redirect_public_{{ family }}:
     - save: true
 {% endfor %}
 
+{% if network.ip is defined %}
+
 tcpudp_redirect_local_ipv4:
   iptables.append:
     - table: filter
@@ -208,5 +210,4 @@ tcpudp_redirect_local_ipv4_additional_localnet_{{ name }}:
     - save: true
 {% endfor %}
 
-
-
+{% endif %}
