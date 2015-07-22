@@ -1,4 +1,4 @@
-{% if network.ntp.servers is not defined or network.ntp.servers == 'default' %}
+{% if network == None or network.get('ntp', {}).get('servers', 'default') == 'default' %}
 {% for server in ntp.default_servers %}
 server {{ server }} iburst
 {% endfor %}
