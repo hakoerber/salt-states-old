@@ -23,7 +23,7 @@ nginx-conf.d:
       - pkg: nginx
 
 {% if pillar.nginx.content is defined %}
-nginx-05_serve.conf:
+nginx-05_content.conf:
   file.managed:
     - name: {{ nginx.conf.include_dir }}/05_content.conf
     - user: root
